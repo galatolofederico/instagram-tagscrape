@@ -35,11 +35,10 @@ exports.deepScrapeTagPage = function(tag) {
     });
 };
 
-exports.scrapeTagPage = function(tag) {
+exports.scrapeTagPage = function(tag, proxy) {
     return new Promise(function(resolve, reject){
         if (!tag) return reject(new Error('Argument "tag" must be specified'));
-
-        request(listURL + tag, function(err, response, body){
+        request({uri : listURL + tag, proxy: proxy}, function(err, response, body){
             if (err) return reject(err);
 
             var data = scrape(body)
@@ -59,11 +58,11 @@ exports.scrapeTagPage = function(tag) {
     });
 };
 
-exports.scrapePostPage = function(code) {
+exports.scrapePostPage = function(code, proxy) {
     return new Promise(function(resolve, reject){
         if (!code) return reject(new Error('Argument "code" must be specified'));
 
-        request(postURL + code, function(err, response, body){
+        request({uri: postURL + code, proxy: proxy}, function(err, response, body){
             var data = scrape(body);
             if (data) {
                 resolve(data.entry_data.PostPage[0].graphql.shortcode_media); 
@@ -75,11 +74,11 @@ exports.scrapePostPage = function(code) {
     });
 }
 
-exports.scrapeLocationPage = function(id) {
+exports.scrapeLocationPage = function(id, proxy) {
     return new Promise(function(resolve, reject){
         if (!id) return reject(new Error('Argument "id" must be specified'));
         
-        request(locURL + id, function(err, response, body){
+        request({uri: locURL + id, proxy: proxy}, function(err, response, body){
             var data = scrape(body);
 
             if (data) {
