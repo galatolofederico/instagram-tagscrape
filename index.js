@@ -5,14 +5,14 @@ var request = require('request'),
     locURL  = 'https://www.instagram.com/explore/locations/',
     dataExp = /window\._sharedData\s?=\s?({.+);<\/script>/;
 
-exports.deepScrapeTagPage = function(tag) {
+exports.deepScrapeTagPage = function(tag, proxy) {
     return new Promise(function(resolve, reject){
-        exports.scrapeTagPage(tag).then(function(tagPage){
+        exports.scrapeTagPage(tag, proxy).then(function(tagPage){
             return Promise.map(tagPage.media, function(media, i, len) {
-                return exports.scrapePostPage(media.code).then(function(postPage){
+                return exports.scrapePostPage(media.code, proxy).then(function(postPage){
                     tagPage.media[i] = postPage;
                     if (postPage.location != null && postPage.location.has_public_page) {
-                        return exports.scrapeLocationPage(postPage.location.id).then(function(locationPage){
+                        return exports.scrapeLocationPage(postPage.location.id, proxy).then(function(locationPage){
                             tagPage.media[i].location = locationPage;
                         })
                         .catch(function(err) {

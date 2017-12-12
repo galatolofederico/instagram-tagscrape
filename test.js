@@ -1,5 +1,6 @@
 ig = require('./index');
 proxy = "<HTTP/HTTPS PROXY>"
+
 ig.scrapeTagPage("test", proxy).then( (r) => {
     console.log("scrapeTagPage: OK")
 }).catch( () => {
